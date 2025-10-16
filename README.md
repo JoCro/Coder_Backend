@@ -66,7 +66,7 @@
 ## ⚡ Quickstart
 
 ```bash
-git clone https://github.com/JoCro/Coderr.git
+git clone https://github.com/JoCro/Coder_Backend.git
 cd Coderr-Projekt
 
 python3 -m venv env
