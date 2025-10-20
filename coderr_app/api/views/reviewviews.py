@@ -31,7 +31,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ("list", "retrieve"):
-            return [permissions.AllowAny()]
+            return [permissions.IsAuthenticated()]
         if self.action == "create":
             return [permissions.IsAuthenticated(), IsCustomerUser()]
         if self.action in ("update", "partial_update", "destroy"):
