@@ -29,6 +29,12 @@ class OrderListSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if data.get("price") is not None:
+            data["price"] = float(data["price"])
+        return data
+
 
 class OrderCreateSerializer(serializers.Serializer):
     """

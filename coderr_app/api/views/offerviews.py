@@ -28,7 +28,7 @@ class OfferFilter(filters.FilterSet):
         fields = ["creator_id"]
 
     def filter_min_price(self, queryset, name, value):
-        return queryset.filter(mind_price__gte=value)
+        return queryset.filter(min_price__gte=value)
 
     def filter_max_delivery(self, queryset, name, value):
         return queryset.filter(min_delivery_time__lte=value)

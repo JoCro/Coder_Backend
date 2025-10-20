@@ -50,6 +50,21 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(reviewer=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        review = serializer.save(reviewer=request.user)
+        data = {
+            "id": review.id,
+            "business_user": review.business_user_id,
+            "reviewer": review.reviewer_id,
+            "rating": float(review.rating),
+            "description": review.description,
+            "created_at": review.created_at.isoformat(),
+            "updated_at": review.updated_at.isoformat(),
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
+
     def update(self, request, *args, **kwargs):
         review = self.get_object()
         if request.user.id != review.reviewer_id:

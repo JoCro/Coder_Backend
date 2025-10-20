@@ -190,6 +190,8 @@ class OfferRetrieveSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         if data.get("image") is None and instance.image:
             data["image"] = instance.image.name
+        if data.get("min_price") is not None:
+            data["min_price"] = float(data["min_price"])
         return data
 
 
@@ -290,6 +292,34 @@ class OfferUpdateSerializer(serializers.ModelSerializer):
 
                 detail_obj.save()
         return instance
+
+    def to_representation(self, instance):
+        request = self.context.get("request")
+        if instance.image:
+            img_url = instance.image.url
+            image_out = request.build_absolute_uri(
+                img_url) if request else img_url
+        else:
+            image_out = None
+
+        details_out = []
+        for d in instance.details.all().order_by("id"):
+            details_out.append({
+                "id": d.id,
+                "title": d.title,
+                "revisions": d.revisions,
+                "delivery_time_in_days": d.delivery_time,
+                "price": float(d.price) if d.price is not None else None,
+                "features": d.features or [],
+                "offer_type": d.offer_type,
+            })
+        return {
+            "id": instance.id,
+            "title": instance.title,
+            "image": image_out,
+            "description": instance.description,
+            "details": details_out,
+        }
 
 
 class OfferDetailRetrieveSerializer(serializers.ModelSerializer):

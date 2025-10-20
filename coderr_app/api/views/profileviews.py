@@ -16,7 +16,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     - Returns 403 if a user attempts to edit another user’s profile.
     """
 
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProfileSerializer
     parser_classes = [JSONParser, MultiPartParser, FormParser]
 
