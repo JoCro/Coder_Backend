@@ -81,7 +81,18 @@ class ReviewViewSet(viewsets.ModelViewSet):
                 {"detail": "You do not have permission to perform this action."},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        return super().partial_update(request, *args, **kwargs)
+        super().partial_update(request, *args, **kwargs)
+        review.refresh_from_db()
+        data = {
+            "id": review.id,
+            "business_user": review.business_user_id,
+            "reviewer": review.reviewer_id,
+            "rating": float(review.rating),
+            "description": review.description,
+            "created_at": review.created_at.isoformat(),
+            "updated_at": review.updated_at.isoformat(),
+        }
+        return Response(data, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
         review = self.get_object()
