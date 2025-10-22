@@ -60,8 +60,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
             "reviewer": review.reviewer_id,
             "rating": float(review.rating),
             "description": review.description,
-            "created_at": review.created_at.isoformat(),
-            "updated_at": review.updated_at.isoformat(),
+            "created_at": review.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "updated_at": review.updated_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
         return Response(data, status=status.HTTP_201_CREATED)
 
@@ -89,8 +89,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
             "reviewer": review.reviewer_id,
             "rating": float(review.rating),
             "description": review.description,
-            "created_at": review.created_at.isoformat(),
-            "updated_at": review.updated_at.isoformat(),
+            "created_at": review.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "updated_at": review.updated_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
         return Response(data, status=status.HTTP_200_OK)
 

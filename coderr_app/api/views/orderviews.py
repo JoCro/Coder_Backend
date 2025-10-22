@@ -101,7 +101,10 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
                 and request.user.id == order.business_user_id):
             return Response({"detail": "You do not have permission to perforn this action"}, status=status.HTTP_403_FORBIDDEN)
 
-        return super().patch(request, *args, **kwargs)
+        super_response = super().patch(request, *args, **kwargs)
+        order.refresh_from_db()
+        out = OrderListSerializer(order)
+        return Response(out.data, status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         if not request.user.is_staff:

@@ -50,9 +50,11 @@ class ProfileSerializer(serializers.ModelSerializer):
             data["file"] = req.build_absolute_uri(url) if req else url
         else:
             data["file"] = ""
-
         for k in ["first_name", "last_name", "location", "tel", "description", "working_hours"]:
             data[k] = data.get(k) or ""
+        if data.get("created_at"):
+            data["created_at"] = instance.created_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
         return data
 
     def validate(self, attrs):
@@ -121,6 +123,9 @@ class BusinessProfileListSerializer(serializers.ModelSerializer):
         for key in ["first_name", "last_name", "location", "tel", "description", "working_hours"]:
             if data.get(key) in (None,):
                 data[key] = ""
+        if hasattr(instance, "created_at") and instance.created_at:
+            data["created_at"] = instance.created_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
         return data
 
 
@@ -160,4 +165,7 @@ class CustomerProfileListSerializer(serializers.ModelSerializer):
         for key in ["first_name", "last_name", "location", "tel", "description", "working_hours"]:
             if key in data and data.get(key) in (None,):
                 data[key] = ""
+        if data.get("uploaded_at"):
+            data["uploaded_at"] = instance.created_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
         return data

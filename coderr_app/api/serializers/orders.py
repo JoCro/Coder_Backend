@@ -33,6 +33,12 @@ class OrderListSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         if data.get("price") is not None:
             data["price"] = float(data["price"])
+        if data.get("created_at"):
+            data["created_at"] = instance.created_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
+        if data.get("updated_at"):
+            data["updated_at"] = instance.updated_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
         return data
 
 

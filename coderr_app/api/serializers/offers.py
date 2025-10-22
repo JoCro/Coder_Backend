@@ -70,6 +70,12 @@ class OfferListSerializer(serializers.ModelSerializer):
             data["image"] = request.build_absolute_uri(url) if request else url
         else:
             data["image"] = None
+        if data.get("created_at"):
+            data["created_at"] = instance.created_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
+        if data.get("updated_at"):
+            data["updated_at"] = instance.updated_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
         return data
 
 
@@ -133,7 +139,6 @@ class OfferCreateSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = {
-
             "id": instance.id,
             "title": instance.title,
             "image": (instance.image.name if instance.image else None),
@@ -150,8 +155,13 @@ class OfferCreateSerializer(serializers.ModelSerializer):
                 }
                 for d in instance.details.all().order_by("id")
             ],
-
         }
+        if hasattr(instance, "created_at") and instance.created_at:
+            data["created_at"] = instance.created_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
+        if hasattr(instance, "updated_at") and instance.updated_at:
+            data["updated_at"] = instance.updated_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
         return data
 
 
@@ -192,6 +202,12 @@ class OfferRetrieveSerializer(serializers.ModelSerializer):
             data["image"] = instance.image.name
         if data.get("min_price") is not None:
             data["min_price"] = float(data["min_price"])
+        if data.get("created_at"):
+            data["created_at"] = instance.created_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
+        if data.get("updated_at"):
+            data["updated_at"] = instance.updated_at.strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
         return data
 
 
